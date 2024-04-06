@@ -1,0 +1,95 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{etoolbox}
+\AtBeginEnvironment{align}{\setcounter{equation}{0}}
+\allowdisplaybreaks
+\pgfplotsset{compat=1.3}
+
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{arrows.meta}
+\pgfplotsset{compat=1.5.1}
+
+
+\title{Durandi}
+\normalsize
+\author{Erjon Konjuhi}
+\date{\today}
+
+\begin{document}
+\newcommand{\aufgabe}[4]{
+
+\section{Vektorgeometrie Aufgabe 13}
+
+
+\pgfmathsetmacro{\m}{#1}
+  \pgfmathsetmacro{\q}{#2}
+  \pgfmathsetmacro{\y}{#4}
+  \pgfmathsetmacro{\z}{#3}
+  \pgfmathsetmacro{\result}{\m*\z+\q}
+
+
+
+  \noindent\fbox{%
+    \parbox{\textwidth}{%
+     \textbf{\underline{Aufgabe}:} Zeige rechnerisch, ob der Punkt P(\z,\y) auf dem Graphen der Funktion $y=\m x+\q$ liegt.
+    }%
+  }
+  \vspace{1cm}
+
+
+  %\pgfmathsetmacro{\m}{1.2}
+  %\pgfmathsetmacro{\q}{3}
+  %\pgfmathsetmacro{\y}{3}
+  %\pgfmathsetmacro{\z}{0}
+  %\pgfmathsetmacro{\result}{\m*\z+\q}
+
+
+
+  \begin{tikzpicture}
+    \centering
+    \begin{axis}[
+      axis lines=middle,
+      axis line style={Stealth-Stealth,very thick},
+      xmin=-5.5,xmax=5.5,ymin=-5.5,ymax=5.5,
+      xtick distance=1,
+      ytick distance=1,
+      xlabel=$x$,
+      ylabel=$y$,
+      title={Lineare Funktion},
+      grid=major,
+      grid style={thin,densely dotted,black!20},
+      width = 1\textwidth,
+      height=1\textwidth
+      ]
+      \addplot [black ,domain=-5:5] {x*\m +\q};
+      \filldraw[black] (axis cs:\z,\y) circle(2pt) node[anchor=west]{P(\z,\y)};
+
+    \end{axis}
+
+  \end{tikzpicture}
+
+
+  \noindent
+  \textbf{\underline{Lösung}:} Um festellen zu können, ob ein gegebener Punkt auf einer linearen Funktion liegt, muss die x-Koordinate des Punktes in die Funktion eingesetzt werden. Wenn der y-Wert der gleiche ist wie die y-Koordinate, dann liegt der Punkt auf der Gerade, andernfalls nicht.
+
+  \begin{align}
+    y &= mx+q\\
+      &= \m x+\q\\
+    \y &\stackrel{!}{=} \m \cdot \z + \q\\
+    \y &\stackrel{!}{=} \result
+  \end{align}
+
+}
+
+%{m}{q}{x}{y}
+\aufgabe{1.2}{0}{1}{1.2}
+\newpage
+\aufgabe{2}{2}{1}{4}
+\newpage
+\aufgabe{0.3}{-2}{4}{-3}
+\newpage
+\aufgabe{5}{1}{2}{1}
+
+\end{document}

@@ -1,0 +1,270 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{etoolbox}
+\usepackage{xfp}
+%\AtBeginEnvironment{align}{\setcounter{equation}{0}}
+\allowdisplaybreaks
+\pgfplotsset{compat=1.3}
+
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{arrows.meta}
+\pgfplotsset{compat=1.5.1}
+
+\usepackage{siunitx}
+\sisetup{
+  round-mode = places,
+  round-precision = 3
+}%
+
+\title{Durandi}
+\normalsize
+\author{Erjon Konjuhi}
+\date{\today}
+
+\begin{document}
+
+\newcommand{\isNegative}[1]{
+  \fpeval{\fpeval{#1} < 0}=1
+}
+
+\newcommand{\doubleMinus}[1]{
+  \ifnum\fpeval{\fpeval{#1} < 0}=1%\isNegative{#1}{#1}
+    + \num[round-pad = false]{\fpeval{- #1}}
+  \else
+    - \num[round-pad = false]{#1}
+  \fi
+}
+
+\newcommand{\plusMinus}[1]{
+  \ifnum\fpeval{\fpeval{#1} < 0}=1%\isNegative{#1}{#1}
+    \num[round-pad = false]{#1}
+  \else
+    + \num[round-pad = false]{#1}
+  \fi
+}
+
+\newcommand{\multMinus}[1]{
+  \ifnum\fpeval{\fpeval{#1} < 0}=1%\isNegative{#1}{#1}
+    \cdot (\num[round-pad = false]{#1})
+  \else
+    \cdot \num[round-pad = false]{#1}
+  \fi
+}
+
+\newcommand{\absolute}[1]{
+  \ifnum\fpeval{\fpeval{#1} < 0}=1%\isNegative{#1}{#1}
+    -\fpeval{#1}
+  \else
+    #1
+  \fi
+}
+
+\newcommand{\operation}[3]{
+  %
+  \ifdim\absolute{#2}pt=0pt
+  \else
+    \if#1+
+      \plusMinus{\fpeval{#2}} #3
+    \else
+      \if#1-
+        \doubleMinus{\fpeval{#2}} #3
+      \else
+        \if#1*
+          \multMinus{\fpeval{#2}} #3
+        \fi
+      \fi
+    \fi
+  \fi
+}
+
+\newcommand{\negSquare}[1]{
+  \ifnum\fpeval{\fpeval{#1} < 0}=1%\isNegative{#1}{#1}
+    (\num[round-pad = false]{#1})^2
+  \else
+    \num[round-pad = false]{#1}^2
+  \fi
+}
+
+\newcommand{\firstNum}[2]{
+  %
+  \ifdim\absolute{#1}pt=0pt
+  \else
+    \num[round-pad = false]{#1} #2
+  \fi
+}
+
+\newcommand{\aufgabe}[6]{
+
+  \setcounter{equation}{0}
+
+  \section{Trigonometrie und Vektorgeometrie S.47 Aufgabe 14}
+
+
+
+  \noindent\fbox{%
+    \parbox{\textwidth}{%
+      \textbf{\underline{Aufgabe}:} Die Kreise $K_{1}:(x \doubleMinus{#1})^{2}+(y \doubleMinus{#2})^{2}=#3$ und $K_{2}:(x \doubleMinus{#4})^{2}+(y \doubleMinus{#5})^{2}=#6$ haben eine gemeinsame Sehne. Wie lang ist diese?
+    }}
+  \vspace{1cm}
+
+      \def\posx{\fpeval{#1}}
+      \def\posy{\fpeval{#2}}
+      \def\r{\fpeval{#3}}
+      \def\radius{\fpeval{(\r)^(0.5)}}
+
+      \def\posxt{\fpeval{#4}}
+      \def\posyt{\fpeval{#5}}
+      \def\rt{\fpeval{#6}}
+      \def\radiust{\fpeval{(\rt)^(0.5)}}
+
+      \def\b{\fpeval{2*\posx}}
+      \def\c{\fpeval{(\posx)^2}}
+      \def\by{\fpeval{2*\posy}}
+      \def\cy{\fpeval{(\posy)^2}}
+
+      \def\bt{\fpeval{2*\posxt}}
+      \def\ct{\fpeval{(\posxt)^2}}
+      \def\bty{\fpeval{2*\posyt}}
+      \def\cty{\fpeval{(\posyt)^2}}
+
+      \def\rad{\fpeval{\r-\c-\cy}}
+      \def\radt{\fpeval{\rt-\ct-\cty}}
+
+      \def\bnew{\fpeval{-\b+\bt}}
+      \def\bynew{\fpeval{-\by+\bty}}
+      \def\radnew{\fpeval{\rad-\radt}}
+
+      \def\bnewsq{\fpeval{\bnew^2}}
+      \def\bynewsq{\fpeval{\bynew^2}}
+
+      \def\radnewOverBnew{\fpeval{\radnew/\bnew}}
+      \def\bynewOverBnew{\fpeval{-\bynew/\bnew}}
+
+      \def\simple{\fpeval{(-\b*\radnew)/\bnew}}
+      \def\simpler{\fpeval{(\b*\bynew)/\bnew}}
+
+      \def\radnewOverBnewsq{\fpeval{\fpeval{(\radnewOverBnew)^2}}}
+      \def\bynewOverBnewsq{\fpeval{\fpeval{(\bynewOverBnew)^2}}}
+      \def\twoRadnewBynewOverBnewsq{\fpeval{\fpeval{2*\radnewOverBnew*\bynewOverBnew}}}
+
+      \def\ysq{\fpeval{1+\bynewOverBnewsq}}
+      \def\uai{\fpeval{\twoRadnewBynewOverBnewsq+\simpler-\by}}
+      \def\none{\fpeval{\radnewOverBnewsq+\simple-\rad}}
+
+
+      \def\mitternachtPlus{\fpeval{\fpeval{(-\uai+(((\uai)^2)-4*\ysq*\none)^(0.5))/(2*\ysq)}}}
+      \def\mitternachtMinus{\fpeval{\fpeval{(-\uai-(((\uai)^2)-4*\ysq*\none)^(0.5))/(2*\ysq)}}}
+
+      \def\fracone{\fpeval{\fpeval{\radnew-\bynew*\mitternachtPlus}}}
+      \def\fractwo{\fpeval{\fpeval{\radnew-\bynew*\mitternachtMinus}}}
+
+      \def\resultxone{\fpeval{\fpeval{\fracone / \bnew}}}
+      \def\resultxtwo{\fpeval{\fpeval{\fractwo/\bnew}}}
+
+      \def\resultx{\fpeval{\resultxtwo-\resultxone}}
+      \def\resulty{\fpeval{\mitternachtMinus-\mitternachtPlus}}
+      \def\result{\fpeval{(((\resultx)^2)+((\resulty)^2))^(0.5)}}
+
+
+
+
+
+
+      \begin{tikzpicture}
+
+
+
+      \centering
+
+
+
+      \begin{axis}[
+        axis lines=middle,
+        axis line style={Stealth-Stealth, very thick},
+        xmin=-30,xmax=60,ymin=-30,ymax=60,
+        xtick distance = 20,
+        ytick distance = 20,
+        xlabel=$x$,
+        ylabel=$y$,
+        title={Kreissehne},
+        grid=major,
+        grid style={thin, densely dotted, black!20},
+        width=1\textwidth,
+        height=1\textwidth
+        ]
+
+        \draw (axis cs:\posx,\posy) circle [blue, radius=\radius];
+        \draw (axis cs:\posxt,\posyt) circle [blue, radius=\radiust];
+
+        \draw (axis cs:\resultxone,\mitternachtPlus) -- (axis cs:\resultxtwo,\mitternachtMinus)[line width = 0.5mm, red];
+
+
+        \end{axis}
+      \end{tikzpicture}
+
+      \vspace{1cm}
+
+      \noindent
+      \textbf{\underline{Lösungsweg}:}
+      Die gemeinsame Kreissehne ist durch die zwei Schnittpunkte der Kreise verbunden. Um die Schnittpunkte zu finden, muss als erstes ein Gleichungssystem mit den beiden Kreisgleichungen erstellt werden.
+
+      \begin{align}
+        \begin{vmatrix}(x \operation{-}{\posx}{})^{2} + (y \operation{-}{\posy}{})^{2} &= \num[round-pad = false]{\r} \\ (x \operation{-}{\posxt}{})^{2} + (y \operation{-}{\posyt}{})^{2} &= \num[round-pad = false]{\rt}\end{vmatrix} \\
+        \begin{vmatrix}x^{2} \operation{-}{\b}{x}  \operation{+}{\c}{} + y^{2} \operation{-}{\by}{y} \operation{+}{\cy}{} &= \r \\ x^{2} \operation{-}{\bt}{x} \operation{+}{\ct}{} + y^{2} \operation{-}{\bty}{y} \operation{+}{\cty}{} &= \rt \end{vmatrix}\\
+        \begin{vmatrix}x^{2}+y^{2} \operation{-}{\b}{x} \operation{-}{\by}{y} &= \rad  \\ x^{2}+y^{2} \operation{-}{\bt}{x} \operation{-}{\bty}{y} &= \radt \end{vmatrix}\\
+      \end{align}
+      Das Ergebnis dieses Gleichungssystems ist eine lineare Funktion, welche durch die gemeinsamen Schnittpunkte der beiden Kreise definiert ist.
+      \begin{align}
+        \bnew x \operation{+}{\bynew}{y} = \radnew\\
+      \end{align}
+      Diese Funktion kann in ein Gleichungssystem mit einer der zwei Kreisgleichungen eingesetzt werden. Dafür muss die Funktion nach einer Variable aufgelöst werden. Anschliessend kann diese Variable in die Kreisgleichung eingesetzt werden.
+      \begin{align}
+        \begin{vmatrix} x^{2}+y^{2} \operation{-}{\b}{} \operation{-}{\by}{y} &= \num[round-pad = false]{\rad}  \\  \firstNum{\bnew}{x} \operation{+}{\bynew}{y} &= \num[round-pad = false]{\radnew}\end{vmatrix}\\
+        x = \frac{\firstNum{\radnew}{}  \operation{-}{\bynew}{y}}{\num[round-pad = false]{\bnew}}\\
+        (\frac{\firstNum{\radnew}{} \operation{-}{\bynew}{y}}{\num[round-pad = false]{\bnew}})^{2}+y^{2} \operation{-}{\b}{(\frac{\radnew \operation{-}{\bynew}{y}}{\bnew})} \operation{-}{\by}{y} &= \num[round-pad = false]{\rad}\\
+        (\firstNum{\radnewOverBnew}{} \operation{+}{\bynewOverBnew}{y})^{2}+y^{2} \operation{+}{\simple}{} \operation{+}{\simpler}{y}  \operation{-}{\by}{y} &= \num[round-pad = false]{\rad}\\
+        \firstNum{\radnewOverBnewsq}{} \operation{+}{\bynewOverBnewsq}{y^{2}} \operation{+}{\twoRadnewBynewOverBnewsq}{y} + y^{2} \operation{+}{\simple}{} \operation{+}{\simpler}{y}  \operation{-}{\by}{y} &= \num[round-pad = false]{\rad}\\
+      \end{align}
+        Schlussendlich führt dies zur folgenden quadratischen Gleichung
+      \begin{align}
+        \firstNum{\ysq}{y^{2}}  \operation{+}{\uai}{y} \operation{+}{\none}{} &= 0.
+      \end{align}
+        Damit erhält man für die beiden Schnittpunkte je eine Koordinate. In diesem Fall ist das die y-Koordinate. Diese Koordinaten können in die vorher herausgefundene lineare Funktion eingesetzt werden und man erhält dadurch die zwei Punkte der Kreissehne.
+      \begin{align}
+        y_{1} &= \num[round-pad = false]{\mitternachtPlus}\\
+        y_{2} &= \num[round-pad = false]{\mitternachtMinus}\\
+        x &= \frac{\num[round-pad = false]{\radnew}  \operation{-}{\bynew}{y}}{\bnew}\\
+        x_{1} &= \frac{\num[round-pad = false]{\fracone}}{\num[round-pad = false]{\bnew}}\\
+        x_{1} &= \num[round-pad = false]{\resultxone}\\
+        x_{2} &= \frac{\num[round-pad = false]{\fractwo}}{\num[round-pad = false]{\bnew}}\\
+        x_{2} &= \num[round-pad = false]{\resultxtwo}
+      \end{align}
+        Der Vektor der die beiden Schnittpunkte verbindet kann ausgerechnet werden, indem man den Ortsvektor des einen Schnittpunktes von der anderen subtrahiert.
+      \begin{align}
+       \vec{ S_{1}S_{2}} &= \begin{pmatrix}
+                        \num[round-pad = false]{\resultxtwo} \operation{-}{\resultxone}{} \\
+                        \num[round-pad = false]{\mitternachtMinus} \operation{-}{\mitternachtPlus}{}
+                      \end{pmatrix}\\
+              &= \begin{pmatrix}
+                   \num[round-pad = false]{\resultx} \\
+                   \num[round-pad = false]{\resulty}
+                 \end{pmatrix}\\
+      \end{align}
+        Schlussendlich muss nur noch die Länge des Vektors ausgerechnet werden, welche die Länge der Kreissehne entspricht.
+      \begin{align}
+        s &= \sqrt{\negSquare{\resultx}+\negSquare{\resulty}}\\
+          &= \num[round-pad = false]{\result}
+      \end{align}
+      }
+
+      %{x1}{y1}{r1^2}{x2}{y2}{r2^2}%
+      \aufgabe{0}{-10}{400}{10}{20}{1400}
+      \newpage
+      \aufgabe{1}{5}{121}{10}{10}{222}
+      \newpage
+      \aufgabe{6}{20}{121}{10}{11}{222}
+      \newpage
+      \aufgabe{-5}{20}{800}{2}{2}{900}
+      \end{document}

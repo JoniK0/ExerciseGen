@@ -1,0 +1,157 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{etoolbox}
+\AtBeginEnvironment{align}{\setcounter{equation}{0}}
+\allowdisplaybreaks
+\pgfplotsset{compat=1.3}
+
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{arrows.meta}
+\pgfplotsset{compat=1.5.1}
+
+\usepackage{siunitx}
+\sisetup{
+  round-mode = places,
+  round-precision = 3
+}%
+
+
+
+
+\title{Durandi}
+\normalsize
+\author{Erjon Konjuhi}
+\date{\today}
+
+\begin{document}
+
+
+\newcommand{\negSquare}[1]{
+  \ifnum\fpeval{\fpeval{#1} < 0}=1%\isNegative{#1}{#1}
+    (\num[round-pad = false]{#1})^2
+  \else
+    \num[round-pad = false]{#1}^2
+  \fi
+}
+
+\newcommand{\aufgabe}[3]{
+  \def\ptDx{#1}
+  \def\ptDy{#2}
+  \def\ptDz{#3}
+  \aufgabeFixesD
+}
+
+\newcommand{\aufgabeFixesD}[9]{
+
+
+  \section{Vektorgeometrie Aufgabe 39}
+
+    \def\Ax{\fpeval{#1}}
+    \def\Ay{\fpeval{#2}}
+    \def\Az{\fpeval{#3}}
+
+    \def\Bx{\fpeval{#4}}
+    \def\By{\fpeval{#5}}
+    \def\Bz{\fpeval{#6}}
+
+    \def\Cx{\fpeval{#7}}
+    \def\Cy{\fpeval{#8}}
+    \def\Cz{\fpeval{#9}}
+
+    \def\Dx{\fpeval{\ptDx}}
+    \def\Dy{\fpeval{\ptDy}}
+    \def\Dz{\fpeval{\ptDz}}
+
+    \def\ax{\fpeval{\Bx-\Ax}}
+    \def\ay{\fpeval{\By-\Ay}}
+    \def\az{\fpeval{\Bz-\Az}}
+
+    \def\bx{\fpeval{\Dx-\Ax}}
+    \def\by{\fpeval{\Dy-\Ay}}
+    \def\bz{\fpeval{\Dz-\Az}}
+
+    \def\cx{\fpeval{\Cx-\Ax}}
+    \def\cy{\fpeval{\Cy-\Ay}}
+    \def\cz{\fpeval{\Cz-\Az}}
+
+    \def\crossx{\fpeval{\ay*\bz-\az*\by}}
+    \def\crossy{\fpeval{\az*\bx-\ax*\bz}}
+    \def\crossz{\fpeval{\ax*\by-\ay*\bx}}
+
+    \def\vx{\fpeval{\crossx*\cx}}
+    \def\vy{\fpeval{\crossy*\cy}}
+    \def\vz{\fpeval{\crossz*\cz}}
+
+    \def\sqroot{\fpeval{((\vx)^2)+((\vy)^2)+((\vz)^2)}}
+    \def\root{\fpeval{(\sqroot)^(0.5)}}
+    \def\result{\fpeval{(1/6)*\root}}
+
+
+    \noindent\fbox{%
+    \parbox{\textwidth}{%
+      \textbf{\underline{Aufgabe}:}Ein Tetraeder ist im Raum durch die Punkte A(\Ax,\Ay,\Az),B(\Bx,\By,\Bz),C(\Cx,\Cy,\Cz),D(\Dx,\Dy,\Dz) definiert. Berechne das Volumen.
+    }%
+  }
+  \vspace{1cm}
+
+
+  \begin{tikzpicture}[scale=0.5]
+    \centering
+
+
+      \pgfmathsetmacro{\factor}{1/sqrt(2)};
+      \coordinate [label=right:{$A(\Ax, \Ay, \Az)$}] (A) at (\Ax,\Ay,\Az*\factor);
+      \coordinate [label=left:{$B(\Bx, \By, \Bz)$}] (B) at (\Bx,\By,\Bz*\factor);
+      \coordinate [label=above:{$C(\Cx, \Cy, \Cz)$}] (C) at (\Cx,\Cy,\Cz*\factor);
+      \coordinate [label=below:{$D(\Dx, \Dy, \Dz)$}] (D) at (\Dx,\Dy,\Dz*\factor);
+
+      \draw[->] (0,0) -- (6,0,0) node[right] {$x$};
+      \draw[->] (0,0) -- (0,6,0) node[above] {$y$};
+      \draw[->] (0,0) -- (0,0,6) node[below left] {$z$};
+
+
+      \draw[-, opacity=.5] (A)--(D)--(B)--cycle;
+      \draw[-, opacity=.5] (A) --(D)--(C)--cycle;
+      \draw[-, opacity=.5] (B)--(D)--(C)--cycle;
+
+    \end{tikzpicture}
+
+    \pgfmathsetmacro{\aroot}{(\ax)^2+(\ay)^2+(\az)^2}
+    \pgfmathsetmacro{\a}{\aroot^0.5}
+    \pgfmathsetmacro{\V}{((2^0.5)*\a^3)/12}
+
+    \noindent
+    \textbf{\underline{Lösung}:} Das Volumen eines Tetraeders kann mit der allgemeinen Formel für ein Spat ausgerechnet werden.
+
+    \begin{align}
+      V &= \frac{1}{6}\begin{vmatrix}\det\begin{pmatrix}\vec{a}\\\vec{b}\\\vec{c}\end{pmatrix}\end{vmatrix}\ \\
+    \end{align}
+      Für diese Formel muss man jedoch noch die Richtungsvektoren von einem Beliebigen Punkt aus ausrechnen. In diesem Fall vom Punkt A.
+    \begin{align}
+      \vec{a} &= \vec{B}-\vec{A} = \begin{pmatrix}\num[round-pad = false]{\ax} \\ \num[round-pad = false]{\ay} \\ \num[round-pad = false]{\az}\end{pmatrix} \\
+      \vec{b} &= \vec{D}-\vec{A} = \begin{pmatrix}\num[round-pad = false]{\bx} \\ \num[round-pad = false]{\by} \\ \num[round-pad = false]{\bz}\end{pmatrix}\\
+      \vec{c} &= \vec{C}-\vec{A} = \begin{pmatrix}\num[round-pad = false]{\cx} \\ \num[round-pad = false]{\cy} \\ \num[round-pad = false]{\cz}\end{pmatrix}\\
+    \end{align}
+    Jetzt muss man nur noch die Vektoren in die Formel einsetzen.
+    \begin{align}
+      V &= \frac{1}{6}\cdot\begin{vmatrix}(\vec{a} \times \vec{b})\cdot\vec{c}\end{vmatrix}\\
+       % &= \frac{1}{6}\cdot\begin{vmatrix}\begin{pmatrix}\ay\cdot\bz-\az\cdot\by\\ \az\cdot\bx-\ax\cdot\bz \\ \ax\cdot\by-\ay\cdot\bx\end{pmatrix}\cdot\begin{pmatrix}\cx\\ \cy \\ \cz\end{pmatrix}\end{vmatrix}\\
+        &= \frac{1}{6}\begin{vmatrix}\begin{pmatrix}\num[round-pad = false]{\crossx} \\ \num[round-pad = false]{\crossy} \\ \num[round-pad = false]{\crossz}\end{pmatrix}\cdot\begin{pmatrix} \num[round-pad = false]{\cx} \\ \num[round-pad = false]{\cy} \\ \num[round-pad = false]{\cz}\end{pmatrix} \end{vmatrix}\\
+        &= \frac{1}{6}\begin{vmatrix}\begin{pmatrix}\vx \\ \vy \\ \vz\end{pmatrix}\end{vmatrix}\\
+        &= \frac{1}{6}\sqrt{\negSquare{\vx}+\negSquare{\vy}+\negSquare{\vz}}\\
+        &= \frac{1}{6}\sqrt{\num[round-pad = false]{\sqroot}}\\
+        &= \frac{1}{6}\num[round-pad = false]{\root}\\
+      V &= \num[round-pad = false]{\result}
+    \end{align}
+  }
+
+  \aufgabe{1}{5}{3}{2}{0}{-2}{-2}{0}{-2}{0}{2}{2}
+ \newpage
+  \aufgabe{0}{0}{-3}{2}{4}{7}{0}{2}{2}{2}{1}{3}
+  \newpage
+  \aufgabe{1}{5}{3}{4}{0}{-2}{-2}{0}{-2}{0}{0}{2}
+  \newpage
+  \aufgabe{2}{2}{-2}{-2}{0}{-2}{5}{-1}{2}{2}{1}{4}
+\end{document}

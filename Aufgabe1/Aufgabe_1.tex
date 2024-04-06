@@ -1,0 +1,111 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{etoolbox}
+\AtBeginEnvironment{align}{\setcounter{equation}{0}}
+\allowdisplaybreaks
+\pgfplotsset{compat=1.3}
+
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{arrows.meta}
+\pgfplotsset{compat=1.5.1}
+\usepackage{siunitx}
+\sisetup{
+  round-mode = places,
+  round-precision = 3
+}
+
+
+
+
+
+\title{Durandi}
+\normalsize
+\author{Erjon Konjuhi}
+\date{\today}
+
+\begin{document}
+\newcommand{\aufgabe}[1]{
+
+  \section{Analysis S.43 Aufgabe 21 mit Parameter A=#1}
+
+  \centering
+
+  \noindent\fbox{%
+    \parbox{\textwidth}{%
+     \textbf{\underline{Aufgabe}:} Der Graph der Funktion $f:y=(a-x)\sqrt{x},a>0$, schliesst mit der x-Achse ein Flächenstück vom Inhalt A = #1 ein. Welchen Wert hat a?
+    }%
+  }
+  \vspace{1cm}
+
+    \def\A{#1}
+    \pgfmathsetmacro{\b}{((15 * \A)/4)^(1/5)}
+    \pgfmathsetmacro{\a}{\b^2}
+
+    \begin{tikzpicture}[scale=0.7]
+
+    \begin{axis}[
+      axis lines=middle,
+      axis line style={Stealth-Stealth, thick},
+      xmin=-2,xmax=\a+2,ymin=-2,ymax=\a+2,
+      xtick distance=1,
+      ytick distance=1,
+      xlabel=$x$,
+      ylabel=$y$,
+      grid=major,
+      style={very thick},
+      grid style={thin, densely dotted, black!20},
+      width=1\textwidth,
+      height=1\textwidth
+      ]
+
+      \addplot [smooth, black, domain=0:\a+1, samples=1000,name path=A] {(\a-x) * sqrt(x)};
+
+      \path[name path=axis] (axis cs:0,0) -- (axis cs:\a,0);
+      \tikzfillbetween [of=A and axis]{cyan!50};
+
+
+    \end{axis}
+
+
+
+  \end{tikzpicture}
+\large
+
+\textbf{\underline{Lösung}:} Die Fläche der Funktion kann mithilfe des Integrals berechnet werden. Die untere Grenze muss 0 sein, aufgrund des Definitionsbereichs der Funktion. Die obere Grenze muss immer $a$ sein, da die Funktion dort die $x$-Achse schneidet. \newline
+
+\begin{align}
+  \A &\stackrel{!}{=} \int_{0}^{a} (a-x)\sqrt{x} \,dx \\
+  &= \int_{0}^{a} ax^{1/2}-x^{3/2}\,dx \\
+  &= [\frac{2}{3} ax^{3/2}-\frac{2}{5} x^{5/2}]_{0}^{a} \\
+  &= \frac{2}{3}a^{5/2}-\frac{2}{5}a^{5/2} \\
+  a^{5/2}(\frac{2}{3}-\frac{2}{5}) &= \A \\
+  a^{5/2} &= \frac{15 \cdot \A}{4} \\
+  \sqrt{a}^{5} &= \frac{15 \cdot \A}{4} \\
+  a^{2}\sqrt{a} &= \frac{15}{4}\A \\
+  a^{5} &= (\frac{15}{4}\A)^{2} \\
+\end{align}
+  Durch vereinfachen kommt man auf die allgemeine Lösung $\sqrt[5]{\frac{15}{4}a}$, in der man die Fläche $A$ einsetzen kann und somit $a$ ausrechnet.
+\begin{align}
+  a &= \sqrt[5]{\frac{15}{4}\A}\\
+  a &= \num[round-pad = false]{\a}
+\end{align}
+
+}
+
+\aufgabe{90}
+\newpage
+\aufgabe{30}
+\newpage
+\aufgabe{50}
+\newpage
+\aufgabe{10}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.3]{meme}
+
+\end{figure}
+
+\end{document}
